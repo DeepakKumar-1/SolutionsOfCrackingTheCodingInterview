@@ -50,6 +50,39 @@ public class Trie {
     public boolean search(String word){
         return search(word, root);
     }
+
+    // Deleting Word from Trie
+    private void remove(String word, TrieNode root){
+        // Base Case
+        if(word.isEmpty()){
+            root.isTerminating = false;
+            return;
+        }
+        int childIndex = word.charAt(0) - 'a';
+        TrieNode child = root.children[childIndex];
+        if(child == null){
+            return;
+        }
+        // Delete remaining word
+        remove(word.substring(1), child);
+        // We can Remove child Node only if it is non Terminating and its number of children are Zero
+        if(!child.isTerminating){
+            int numChild = 0;
+            for(int i=0; i<26; i++){
+                if(child.children[i] != null){
+                    numChild++;
+                }
+            }
+            if(numChild == 0){
+                // We can delete Child
+                root.children[childIndex] = null;
+                child = null;
+            }
+        }
+    }
+    public void remove(String word){
+        remove(word, root);
+    }
     public static void main(String []args){
 
     }
